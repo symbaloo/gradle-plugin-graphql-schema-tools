@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.symbaloo.graphql"
-version = "1.0.0-SNAPSHOT"
+version = "1.0.0"
 
 val isReleaseVersion = !version.toString().endsWith("SNAPSHOT")
 val repoUrl = "https://github.com/arian/graphql-kotlin-test-dsl"
