@@ -1,2 +1,1 @@
-rootProject.name = "graphql-schema-introspection-plugin"
-
+rootProject.name = "graphql-introspection-gradle-plugin"

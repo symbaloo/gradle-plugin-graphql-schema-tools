@@ -1,13 +1,14 @@
 plugins {
     java
     `java-gradle-plugin`
+    `maven-publish`
     id("com.gradle.plugin-publish") version "0.12.0"
     kotlin("jvm") version "1.3.72"
     id("com.diffplug.gradle.spotless") version "4.5.0"
 }
 
-group = "com.symbaloo"
-version = "1.0-SNAPSHOT"
+group = "com.symbaloo.graphql"
+version = "1.0.0-SNAPSHOT"
 
 val isReleaseVersion = !version.toString().endsWith("SNAPSHOT")
 val repoUrl = "https://github.com/arian/graphql-kotlin-test-dsl"
@@ -18,7 +19,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation("com.graphql-java:graphql-java:14.1")
+    implementation("com.graphql-java:graphql-java:15.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.11.0")
 }
 
@@ -53,10 +54,10 @@ pluginBundle {
 gradlePlugin {
     plugins {
         create("graphQLSchemaIntrospectionPlugin") {
-            id = "com.symbaloo.graphql.introspection"
+            id = "com.symbaloo.graphql.graphql-introspection"
             displayName = "graphQLSchemaIntrospectionPlugin"
             description = "graphQLSchemaIntrospectionPlugin"
-            implementationClass = "com.symbaloo.graphql.introspection.SchemaIntrospectionTask"
+            implementationClass = "com.symbaloo.graphql.introspection.SchemaIntrospectionPlugin"
         }
     }
 }

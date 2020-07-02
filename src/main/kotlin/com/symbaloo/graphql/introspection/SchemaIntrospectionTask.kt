@@ -5,7 +5,12 @@ import graphql.GraphQL
 import graphql.introspection.IntrospectionQuery
 import graphql.schema.Coercing
 import graphql.schema.GraphQLScalarType
-import graphql.schema.idl.*
+import graphql.schema.idl.EchoingWiringFactory
+import graphql.schema.idl.RuntimeWiring
+import graphql.schema.idl.ScalarInfo
+import graphql.schema.idl.ScalarWiringEnvironment
+import graphql.schema.idl.SchemaGenerator
+import graphql.schema.idl.SchemaParser
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
@@ -50,8 +55,10 @@ open class SchemaIntrospectionTask @Inject constructor(objects: ObjectFactory) :
                 .coercing(object : Coercing<Any, Any> {
                     override fun parseValue(input: Any): Any =
                         throw UnsupportedOperationException("not implemented")
+
                     override fun parseLiteral(input: Any): Any =
                         throw UnsupportedOperationException("not implemented")
+
                     override fun serialize(dataFetcherResult: Any): Any =
                         throw UnsupportedOperationException("not implemented")
                 })
