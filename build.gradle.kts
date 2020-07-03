@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.symbaloo.graphql"
-version = "1.0.1"
+version = "1.0.2"
 
 val isReleaseVersion = !version.toString().endsWith("SNAPSHOT")
 val repoUrl = "https://github.com/symbaloo/gradle-plugin-graphql-schema-tools"
@@ -70,18 +70,21 @@ publishing {
         }
     }
     repositories {
-        maven {
-            val repoUrl: String = properties["mavenRepoUrl"] as String
-            val releasesRepoUrl = uri("$repoUrl/maven-releases/")
-            val snapshotsRepoUrl = uri("$repoUrl/maven-snapshots/")
+        val repoUrl = properties["mavenRepoUrl"] as String?
 
-            url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+        if (repoUrl != null) {
+            maven {
+                val releasesRepoUrl = uri("$repoUrl/maven-releases/")
+                val snapshotsRepoUrl = uri("$repoUrl/maven-snapshots/")
 
-            // these can be set through gradle project properties
-            if (properties.containsKey("mavenRepoUser")) {
-                credentials {
-                    username = properties["mavenRepoUser"] as String?
-                    password = properties["mavenRepoPass"] as String?
+                url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+
+                // these can be set through gradle project properties
+                if (properties.containsKey("mavenRepoUser")) {
+                    credentials {
+                        username = properties["mavenRepoUser"] as String?
+                        password = properties["mavenRepoPass"] as String?
+                    }
                 }
             }
         }
