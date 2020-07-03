@@ -1,9 +1,8 @@
 package com.symbaloo.graphql.tools
 
+import com.apollographql.apollo.api.internal.QueryDocumentMinifier
 import com.apollographql.apollo.compiler.OperationIdGenerator
 import com.apollographql.apollo.compiler.PackageNameProvider
-import com.apollographql.apollo.compiler.ir.CodeGenerationIR
-import com.apollographql.apollo.compiler.ir.Operation
 import com.apollographql.apollo.compiler.operationoutput.OperationDescriptor
 import com.apollographql.apollo.compiler.operationoutput.toJson
 import com.apollographql.apollo.compiler.parser.GraphQLDocumentParser
@@ -19,7 +18,6 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
-import java.io.File
 
 /**
  * A task to just generate an OperationOutput.json file
@@ -47,32 +45,9 @@ abstract class OperationOutputTask : DefaultTask() {
         val files = graphqlFiles.files
         val codeGenerationIR = GraphQLDocumentParser(schema, DummyPackageNameProvider).parse(files)
 
-        val operationOutput = OperationOutputWriter(OperationIdGenerator.Sha256())
-        operationOutput.visit(codeGenerationIR)
+        val operationIdGenerator = OperationIdGenerator.Sha256()
 
-        val operationOutputFile = destination.get().asFile
-        operationOutputFile.parentFile.mkdirs()
-        operationOutput.writeTo(operationOutputFile)
-
-        println(operationOutputFile)
-    }
-}
-
-internal object DummyPackageNameProvider : PackageNameProvider {
-    override val fragmentsPackageName: String = "com.symbaloo.tmp.fragments"
-    override val typesPackageName: String = "com.symbaloo.tmp.types"
-    override fun operationPackageName(filePath: String): String = "com.symbaloo.tmp.types.$filePath"
-}
-
-internal class OperationOutputWriter(private val operationIdGenerator: OperationIdGenerator) {
-    private var operations: List<Operation> = emptyList()
-
-    fun visit(ir: CodeGenerationIR) {
-        operations = operations + ir.operations
-    }
-
-    fun writeTo(outputJsonFile: File) {
-        val operationOutput = operations.associate {
+        val operationOutput = codeGenerationIR.operations.associate {
             val minimizedSource = QueryDocumentMinifier.minify(it.sourceWithFragments)
             operationIdGenerator.apply(minimizedSource, it.filePath) to OperationDescriptor(
                 it.operationName,
@@ -80,12 +55,14 @@ internal class OperationOutputWriter(private val operationIdGenerator: Operation
             )
         }
 
-        outputJsonFile.writeText(operationOutput.toJson("    "))
+        val operationOutputFile = destination.get().asFile
+        operationOutputFile.parentFile.mkdirs()
+        operationOutputFile.writeText(operationOutput.toJson("    "))
     }
-}
 
-internal object QueryDocumentMinifier {
-    fun minify(queryDocument: String): String {
-        return queryDocument.replace("\\s *".toRegex(), " ")
+    private object DummyPackageNameProvider : PackageNameProvider {
+        override val fragmentsPackageName: String = "com.symbaloo.tmp.fragments"
+        override val typesPackageName: String = "com.symbaloo.tmp.types"
+        override fun operationPackageName(filePath: String): String = "com.symbaloo.tmp.types.$filePath"
     }
 }

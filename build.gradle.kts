@@ -21,6 +21,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("com.graphql-java:graphql-java:15.0")
     implementation("com.apollographql.apollo:apollo-compiler:2.2.2")
+    implementation("com.apollographql.apollo:apollo-api:2.2.2")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.11.0")
 }
 
