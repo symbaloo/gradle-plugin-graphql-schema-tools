@@ -11,7 +11,7 @@ group = "com.symbaloo.graphql"
 version = "1.0.1"
 
 val isReleaseVersion = !version.toString().endsWith("SNAPSHOT")
-val repoUrl = "https://github.com/arian/graphql-kotlin-test-dsl"
+val repoUrl = "https://github.com/symbaloo/gradle-plugin-graphql-schema-tools"
 
 repositories {
     mavenCentral()
@@ -47,18 +47,18 @@ spotless {
 }
 
 pluginBundle {
-    website = "https://github.com/symbaloo/gradle-plugin-graphql-schema-introspection"
-    vcsUrl = "https://github.com/symbaloo/gradle-plugin-graphql-schema-introspection.git"
+    website = repoUrl
+    vcsUrl = "$repoUrl.git"
     tags = listOf("GraphQL", "Introspection", "JSON", "GraphQL Schema")
 }
 
 gradlePlugin {
     plugins {
-        create("graphQLSchemaIntrospectionPlugin") {
-            id = "com.symbaloo.graphql.graphql-introspection"
-            displayName = "graphQLSchemaIntrospectionPlugin"
-            description = "graphQLSchemaIntrospectionPlugin"
-            implementationClass = "com.symbaloo.graphql.introspection.SchemaIntrospectionPlugin"
+        create("graphQLSchemaTools") {
+            id = "com.symbaloo.graphql.graphql-schema-tools"
+            displayName = "GraphQL Schema Tools Plugin"
+            description = "A Gradle Plugin to generate schema introspection and OperationOutput JSON files"
+            implementationClass = "com.symbaloo.graphql.tools.GraphQLSchemaToolsPlugin"
         }
     }
 }

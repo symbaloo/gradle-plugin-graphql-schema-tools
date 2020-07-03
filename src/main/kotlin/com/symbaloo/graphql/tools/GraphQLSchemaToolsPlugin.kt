@@ -1,9 +1,9 @@
-package com.symbaloo.graphql.introspection
+package com.symbaloo.graphql.tools
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-class SchemaIntrospectionPlugin : Plugin<Project> {
+class GraphQLSchemaToolsPlugin : Plugin<Project> {
     override fun apply(target: Project) {
     }
 }

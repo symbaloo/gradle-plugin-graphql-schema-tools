@@ -1,4 +1,4 @@
-package com.symbaloo.graphql.introspection
+package com.symbaloo.graphql.tools
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import graphql.GraphQL

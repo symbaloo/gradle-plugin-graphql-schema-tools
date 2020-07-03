@@ -1,4 +1,4 @@
-package com.symbaloo.graphql.introspection
+package com.symbaloo.graphql.tools
 
 import com.apollographql.apollo.compiler.OperationIdGenerator
 import com.apollographql.apollo.compiler.PackageNameProvider
@@ -61,7 +61,7 @@ abstract class OperationOutputTask : DefaultTask() {
 internal object DummyPackageNameProvider : PackageNameProvider {
     override val fragmentsPackageName: String = "com.symbaloo.tmp.fragments"
     override val typesPackageName: String = "com.symbaloo.tmp.types"
-    override fun operationPackageName(filePath: String): String = "com.symbaloo.tmp.types.${filePath}"
+    override fun operationPackageName(filePath: String): String = "com.symbaloo.tmp.types.$filePath"
 }
 
 internal class OperationOutputWriter(private val operationIdGenerator: OperationIdGenerator) {
